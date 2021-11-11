@@ -1,11 +1,49 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Box, ResponsiveContext } from "grommet";
 import "./styles/Main.css";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
 const Main = () => {
   const size = useContext(ResponsiveContext);
+
+  const [isChecked, SetChecked] = useState(false);
+  const [Email, SetEmail] = useState('');
+  const [isEmail, SetIsEmail] = useState(false);
+  const [ValiMessage, SetMessage] = useState('');
+
+  console.log(isEmail)
+
+  const HandleCheck = () => {
+    SetChecked(!isChecked);
+  };
+
+  const HandleSubs = (e) => {
+    e.preventDefault();
+    if (isChecked) {
+      toast.success("성공");
+    } else {
+      toast.error("이메일 체크 및 개인정보 수집 및 이용에 동의해주세요");
+    }
+  };
+
+  const ValidateEmail = (e) => {
+    const emailRegex  = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    const email = e.target.value;
+    SetEmail(email);
+    console.log(email);
+    console.log(emailRegex.test(email));
+
+    if(!emailRegex.test(email)){
+      SetMessage('올바른 이메일 형식이 아닙니다.');
+      SetIsEmail(false);
+    }else {
+      SetMessage('올바른 이메일 형식이에요!');
+      SetIsEmail(true);
+    }
+  }
 
   return (
     <Box fill background='#fff'>
@@ -26,7 +64,12 @@ const Main = () => {
           <h2>라이팅젤에서 곧 만나요!</h2>
         </div>
       </ContentBox>
-      <LetterBox fill justify='center' align='center' direction={size !== 'small' ? 'row ': 'column'}>
+      <LetterBox
+        fill
+        justify='center'
+        align='center'
+        direction={size !== 'small' ? "row" : "column"}
+      >
         <img src='/tinggelLetter.png' alt='팅젤이2' />
         <LetterFormBox>
           <h3>서비스가 준비되면, 가장 먼저 소식을 알려드릴게요.</h3>
@@ -36,20 +79,23 @@ const Main = () => {
                 <input type='text' placeholder='이름 혹은 닉네임' />
               </div>
               <div className='emailInput'>
-                <input type='text' placeholder='이메일 주소' />
+                <input type='text' placeholder='이메일 주소' onChange={ValidateEmail}/>
+    
               </div>
             </FormDiv>
             <div className='Check'>
-              <label>
+              <label onClick={HandleCheck}>
                 <input type='checkbox' />
                 개인정보 수집 및 이용에 동의합니다.
               </label>
             </div>
-          </form>
 
-          <SubBtn>
-            <button>뉴스레터 신청하기</button>
-          </SubBtn>
+            <SubBtn>
+              <button onClick={(e)=>HandleSubs(e)} disabled={!isEmail} className={isEmail ? 'success' : 'error'}>
+                {isEmail ? '뉴스레터 신청하기' : '빈 칸을 채워주세요!'}
+              </button>
+            </SubBtn>
+          </form>
         </LetterFormBox>
       </LetterBox>
     </Box>
@@ -137,12 +183,12 @@ const ContentBox = styled(Box)`
     font-weight: 600;
   }
 
-
   @media screen and (max-width: 680px) {
     padding-right: 24px;
     padding-left: 24px;
 
-    > .h2-1, .h2-2 {
+    > .h2-1,
+    .h2-2 {
       line-height: 20px;
       font-size: 20px;
     }
@@ -150,7 +196,7 @@ const ContentBox = styled(Box)`
 `;
 
 const LetterBox = styled(Box)`
-  padding: 120px 64px; 
+  padding: 120px 64px;
   gap: 50px;
 
   > img {
@@ -158,7 +204,6 @@ const LetterBox = styled(Box)`
     margin-bottom: 30px;
   }
 
- 
   @media screen and (max-width: 768px) {
     padding-right: 24px;
     padding-left: 24px;
@@ -189,8 +234,7 @@ const LetterFormBox = styled.div`
       font-size: 14px;
     }
   }
-
-`
+`;
 
 const FormDiv = styled.div`
   display: flex;
@@ -210,21 +254,29 @@ const FormDiv = styled.div`
       padding: 10px 8px;
       width: 100%;
       font-size: 17px;
+
     }
   }
 `;
 
 const SubBtn = styled.div`
 
+  margin-top : 15px;
+
   > button {
     cursor: pointer;
-    background-color: #372874;
-    color: #fff;
+    background-color: #ffce1f;;
+    color: #444;
     padding: 10px 20px;
-    border: 1px solid #372874;
+    border: 1px solid #ffce1f;;
     outline: 0;
     font-size: 1.1rem;
+  }
 
+  .error {
+    background-color : #f9f9f9;
+    border: 1px solid  #444;
+    color : #444;
   }
 
   @media screen and (max-width: 768px) {
