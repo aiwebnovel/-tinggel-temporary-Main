@@ -141,7 +141,7 @@ const Animation = styled(Box)`
 `;
 
 const HeaderBox = styled(Box)`
-  padding: 120px 64px;
+  padding: 100px 64px;
 
   > h1 {
     font-family: "NeoDunggeunmo";
