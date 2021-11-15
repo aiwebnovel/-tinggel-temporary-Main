@@ -5,6 +5,9 @@ import "./styles/Main.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
+import axios from "axios";
+
+import SubsResult from "./SubsResult";
 
 const Main = () => {
   const size = useContext(ResponsiveContext);
@@ -13,17 +16,33 @@ const Main = () => {
   const [Email, SetEmail] = useState('');
   const [isEmail, SetIsEmail] = useState(false);
   const [ValiMessage, SetMessage] = useState('');
+  const [SubsDone ,SetSubs] = useState(false);
 
-  console.log(isEmail)
+  // console.log(isEmail)
 
   const HandleCheck = () => {
     SetChecked(!isChecked);
   };
 
-  const HandleSubs = (e) => {
+  const HandleSubs = async(e) => {
     e.preventDefault();
     if (isChecked) {
-      toast.success("성공");
+      //console.log('email',Email)
+      const config = {
+        method: 'post',
+        url: `https://veryshort.best:5051/api/v1/newsletter?email=${Email}`,
+        headers: { 'authentication': localStorage.getItem("token"), },
+      };
+
+      await axios(config)
+      .then((response)=>{
+        //console.log(response);
+        // toast.success("구독 신청이 완료 되었습니다!");
+        SetSubs(true)
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
     } else {
       toast.error("이메일 체크 및 개인정보 수집 및 이용에 동의해주세요");
     }
@@ -31,22 +50,29 @@ const Main = () => {
 
   const ValidateEmail = (e) => {
     const emailRegex  = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    const email = e.target.value;
-    SetEmail(email);
-    console.log(email);
-    console.log(emailRegex.test(email));
+    const Valiemail = e.target.value;
+    SetEmail(Valiemail);
+    //console.log(email);
+    //console.log(emailRegex.test(email));
 
-    if(!emailRegex.test(email)){
-      SetMessage('올바른 이메일 형식이 아닙니다.');
+    if(!emailRegex.test(Valiemail)){
+      SetMessage('🙅‍♀️ 올바른 이메일 형식이 아닙니다.');
       SetIsEmail(false);
     }else {
-      SetMessage('올바른 이메일 형식이에요!');
+      SetMessage('👍 올바른 이메일 형식이에요!');
+      SetEmail(Valiemail)
       SetIsEmail(true);
     }
   }
 
+  const Close = () => {
+    SetSubs(false);
+    // console.log(SubsDone);
+  }
+
   return (
     <Box fill background='#fff'>
+      {SubsDone &&  <SubsResult Subs={SubsDone} close={Close}/>}
       <Animation fill>
         <h1>COMING SOON! </h1>
       </Animation>
@@ -80,7 +106,7 @@ const Main = () => {
               </div>
               <div className='emailInput'>
                 <input type='text' placeholder='이메일 주소' onChange={ValidateEmail}/>
-    
+                <p className={isEmail ? 'correct' : 'incorrect'}>{ValiMessage}</p>
               </div>
             </FormDiv>
             <div className='Check'>
@@ -227,7 +253,7 @@ const LetterFormBox = styled.div`
 
   @media screen and (max-width: 768px) {
     > h3 {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
     }
 
     .Check {
@@ -255,6 +281,19 @@ const FormDiv = styled.div`
       width: 100%;
       font-size: 17px;
 
+    }
+
+    > p {
+      font-size: 15px;
+    }
+
+
+    .correct {
+      color: #ff9300;
+    }
+
+    .incorrect {
+      color : red;
     }
   }
 `;
