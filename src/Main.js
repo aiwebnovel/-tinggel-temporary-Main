@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, ResponsiveContext } from "grommet";
 import "./styles/Main.css";
 
@@ -8,6 +8,8 @@ import styled from "styled-components";
 import axios from "axios";
 
 import SubsResult from "./SubsResult";
+import ReactGA from 'react-ga';
+
 
 const Main = () => {
   const size = useContext(ResponsiveContext);
@@ -69,6 +71,11 @@ const Main = () => {
     SetSubs(false);
     // console.log(SubsDone);
   }
+
+  useEffect(()=>{
+    ReactGA.initialize('UA-212875619-1');
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  },[])
 
   return (
     <Box fill background='#fff'>
