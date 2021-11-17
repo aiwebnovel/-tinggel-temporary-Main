@@ -28,6 +28,12 @@ const Main = () => {
 
   const HandleSubs = async(e) => {
     e.preventDefault();
+    ReactGA.event({
+      category: 'button',
+      action: '뉴스레터 구독',
+      label: 'newsletter'
+    });
+
     if (isChecked) {
       //console.log('email',Email)
       const config = {
