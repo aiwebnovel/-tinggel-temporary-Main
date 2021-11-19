@@ -16,6 +16,7 @@ const Main = () => {
 
   const [isChecked, SetChecked] = useState(false);
   const [Email, SetEmail] = useState('');
+  const [Name, SetName] = useState('');
   const [isEmail, SetIsEmail] = useState(false);
   const [ValiMessage, SetMessage] = useState('');
   const [SubsDone ,SetSubs] = useState(false);
@@ -34,11 +35,12 @@ const Main = () => {
       label: 'newsletter'
     });
 
-    if (isChecked) {
+    // if(isEmail !== '' && Name !==''){
+    if (isChecked ) {
       //console.log('email',Email)
       const config = {
         method: 'post',
-        url: `https://veryshort.best:5051/api/v1/newsletter?email=${Email}`,
+        url: `https://veryshort.best:5051/api/v1/newsletter?email=${Email}&name=${Name}`,
         headers: { 'authentication': localStorage.getItem("token"), },
       };
 
@@ -54,6 +56,9 @@ const Main = () => {
     } else {
       toast.error("이메일 체크 및 개인정보 수집 및 이용에 동의해주세요");
     }
+  // }else {
+  //   toast.error('폼을 채워주세요!');
+  // }
   };
 
   const ValidateEmail = (e) => {
@@ -87,7 +92,7 @@ const Main = () => {
     <Box fill background='#fff'>
       {SubsDone &&  <SubsResult Subs={SubsDone} close={Close}/>}
       <Animation fill>
-        <h1>COMING SOON! </h1>
+        <h1>COMING SOON!</h1>
       </Animation>
       <HeaderBox fill justify='center' align='center' gap='large'>
         <h1>🌟 팅젤이가 곧 찾아갈게요!</h1>
@@ -115,7 +120,9 @@ const Main = () => {
           <form className='FormTag'>
             <FormDiv>
               <div className='nameInput'>
-                <input type='text' placeholder='이름 혹은 닉네임' />
+                <input type='text' placeholder='이름 혹은 닉네임' value={Name} onChange={(e)=>{
+                  SetName(e.target.value)
+                }}/>
               </div>
               <div className='emailInput'>
                 <input type='text' placeholder='이메일 주소' onChange={ValidateEmail}/>
@@ -130,8 +137,8 @@ const Main = () => {
             </div>
 
             <SubBtn>
-              <button onClick={(e)=>HandleSubs(e)} disabled={!isEmail} className={isEmail ? 'success' : 'error'}>
-                {isEmail ? '뉴스레터 신청하기' : '빈 칸을 채워주세요!'}
+              <button onClick={(e)=>HandleSubs(e)} disabled={!isEmail && !Name} className={isEmail && Name ? 'success' : 'error'}>
+                {isEmail && Name ? '뉴스레터 신청하기' : '빈 칸을 채워주세요!'}
               </button>
             </SubBtn>
           </form>
