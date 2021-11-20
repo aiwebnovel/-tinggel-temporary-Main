@@ -174,9 +174,49 @@ const Animation = styled(Box)`
     font-weight: 600;
 
     animation: marquee 8s linear infinite;
+    -webkit-animation: marquee 8s linear infinite;
+    -moz-animation:marquee 8s linear infinite;
+    -o-animation:marquee 8s linear infinite;
+    -ms-animation: marquee 8s linear infinite;
   }
 
   @keyframes marquee {
+    from {
+      right: 0;
+    }
+    to {
+      right: 100%;
+    }
+  }
+
+  @-webkit-keyframes marquee {
+    from {
+      right: 0;
+    }
+    to {
+      right: 100%;
+    }
+  }
+
+  @-moz-keyframes marquee {
+    from {
+      right: 0;
+    }
+    to {
+      right: 100%;
+    }
+  }
+
+  @o-keyframes marquee {
+    from {
+      right: 0;
+    }
+    to {
+      right: 100%;
+    }
+  }
+
+  @-ms-keyframes marquee {
     from {
       right: 0;
     }
