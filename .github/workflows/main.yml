@@ -3,8 +3,9 @@ name: master
 
 on:
   push:
-    branches:
-      - master # master 브랜치에서 push 이벤트가 일어났을 때 실행
+    branches: [main] # master 브랜치에서 push 이벤트가 일어났을 때 실행
+  pull_request:
+    branches: [production] # production 브랜치에서 pull_request 이벤트가 일어났을 때 실행
 
 jobs:
   build:
