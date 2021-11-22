@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Box, ResponsiveContext } from "grommet";
+import {CaretDownFill} from 'grommet-icons';
 import "./styles/Main.css";
 
 import { toast } from "react-toastify";
@@ -97,6 +98,7 @@ const Main = () => {
       <HeaderBox fill justify='center' align='center' gap='large'>
         <h1>🌟 팅젤이가 곧 찾아갈게요!</h1>
         <img src='/tinggel.png' alt='팅젤이' />
+        <div className="arrow"><CaretDownFill size='large'/><CaretDownFill size='large'/><CaretDownFill size='large'/></div>
       </HeaderBox>
       <ContentBox fill>
         <div className='h2-1'>
@@ -229,6 +231,7 @@ const Animation = styled(Box)`
 const HeaderBox = styled(Box)`
   padding: 100px 64px;
 
+
   > h1 {
     font-family: "NeoDunggeunmo";
     font-size: 2rem;
@@ -237,6 +240,13 @@ const HeaderBox = styled(Box)`
 
   > img {
     width: 250px;
+  }
+
+  .arrow {
+    >svg {
+      fill:#ff9300;
+      stroke:#ff9300;
+    }
   }
 
   @media screen and (max-width: 768px) {
